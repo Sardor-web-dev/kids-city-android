@@ -1,6 +1,7 @@
 import { IconSymbol } from "@/components/ui/IconSymbol";
-import { Picker } from "@react-native-picker/picker";
 import { useEffect, useState } from "react";
+import { Menu, Button } from "react-native-paper";
+import { useRef } from "react";
 import {
   Alert,
   Image,
@@ -14,6 +15,9 @@ export default function TabFourScreen() {
   const [clothes, setClothes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedSizes, setSelectedSizes] = useState<{ [key: number]: string }>(
+    {}
+  );
+  const [menuVisible, setMenuVisible] = useState<{ [key: number]: boolean }>(
     {}
   );
 
@@ -69,24 +73,39 @@ export default function TabFourScreen() {
 
               <Text className="mt-2 text-gray-700 text-sm">Размеры:</Text>
               <View className="flex flex-row items-center space-x-2">
-                {Array.isArray(item.size) && item.size.length > 0 ? (
-                  <Picker
-                    selectedValue={selectedSizes[item.id] ?? item.size[0]}
-                    onValueChange={(itemValue) =>
-                      setSelectedSizes((prev) => ({
-                        ...prev,
-                        [item.id]: itemValue,
-                      }))
-                    }
-                    style={{ height: 40, width: 140 }}
-                  >
-                    {item.size.map((size: string, i: number) => (
-                      <Picker.Item key={i} label={size} value={size} />
-                    ))}
-                  </Picker>
-                ) : (
-                  <Text className="text-xs text-red-500">Нет размеров</Text>
-                )}
+                <Menu
+                  visible={menuVisible[item.id]}
+                  onDismiss={() =>
+                    setMenuVisible((prev) => ({ ...prev, [item.id]: false }))
+                  }
+                  anchor={
+                    <Button
+                      mode="outlined"
+                      onPress={() =>
+                        setMenuVisible((prev) => ({ ...prev, [item.id]: true }))
+                      }
+                    >
+                      {selectedSizes[item.id] ?? "Выбери размер"}
+                    </Button>
+                  }
+                >
+                  {item.size.map((size: string, i: number) => (
+                    <Menu.Item
+                      key={i}
+                      onPress={() => {
+                        setSelectedSizes((prev) => ({
+                          ...prev,
+                          [item.id]: size,
+                        }));
+                        setMenuVisible((prev) => ({
+                          ...prev,
+                          [item.id]: false,
+                        }));
+                      }}
+                      title={size}
+                    />
+                  ))}
+                </Menu>
               </View>
 
               <TouchableOpacity
