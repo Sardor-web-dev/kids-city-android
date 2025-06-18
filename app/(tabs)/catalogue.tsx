@@ -49,11 +49,18 @@ export default function TabFourScreen() {
               key={item.id}
               className="w-[48%] mb-4 p-2 bg-gray-100 rounded-xl shadow"
             >
-              <Image
-                source={{ uri: item.Image }}
-                style={{ width: "100%", height: 120, borderRadius: 10 }}
-                resizeMode="cover"
-              />
+              {item.Image ? (
+                <Image
+                  source={{ uri: item.Image }}
+                  style={{ width: "100%", height: 120, borderRadius: 10 }}
+                  resizeMode="cover"
+                  onError={() => console.warn("Ошибка загрузки изображения")}
+                />
+              ) : (
+                <View className="bg-gray-300 h-120 justify-center items-center rounded-md">
+                  <Text className="text-xs text-gray-600">Нет фото</Text>
+                </View>
+              )}
               <Text className="text-base font-bold mt-2">{item.name}</Text>
               <Text className="text-gray-600 text-xs">{item.description}</Text>
               <Text className="text-black font-semibold mt-1 text-sm">
@@ -67,20 +74,24 @@ export default function TabFourScreen() {
                 contentContainerStyle={{ paddingHorizontal: 4 }}
               >
                 <View className="flex flex-row items-center space-x-2">
-                  <Picker
-                    selectedValue={selectedSizes[item.id] || item.size[0]} // по умолчанию первый размер
-                    onValueChange={(itemValue) =>
-                      setSelectedSizes((prev) => ({
-                        ...prev,
-                        [item.id]: itemValue,
-                      }))
-                    }
-                    style={{ height: 50, width: 150 }}
-                  >
-                    {item.size.map((size: string, i: number) => (
-                      <Picker.Item key={i} label={size} value={size} />
-                    ))}
-                  </Picker>
+                  {Array.isArray(item.size) && item.size.length > 0 ? (
+                    <Picker
+                      selectedValue={selectedSizes[item.id] ?? item.size[0]}
+                      onValueChange={(itemValue) =>
+                        setSelectedSizes((prev) => ({
+                          ...prev,
+                          [item.id]: itemValue,
+                        }))
+                      }
+                      style={{ height: 40, width: 140 }}
+                    >
+                      {item.size.map((size: string, i: number) => (
+                        <Picker.Item key={i} label={size} value={size} />
+                      ))}
+                    </Picker>
+                  ) : (
+                    <Text className="text-xs text-red-500">Нет размеров</Text>
+                  )}
 
                   {/* {item.size.map((size: string, index: number) => (
                     <TouchableOpacity
