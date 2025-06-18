@@ -63,7 +63,7 @@ export default function HomeScreen() {
       {/* Заголовок и галерея */}
       <View className="items-center justify-center mt-10 px-4 space-y-6">
         <View className="flex flex-col items-center gap-4">
-          <Text className="text-3xl font-bold text-center">Наши товары</Text>
+          <Text className="text-3xl text-black font-bold text-center">Наши товары</Text>
           <Text className="text-xl text-center">
             Широкий ассортимент для всех возрастов
           </Text>
@@ -101,7 +101,7 @@ export default function HomeScreen() {
       </View>
 
       {/* О нас */}
-      <View className="mt-20 px-6 space-y-6 items-center">
+      <View className="mt-20 px-6 text-black space-y-6 items-center">
         <Text className="text-2xl font-bold text-center">О нас</Text>
         <Text className="font-medium text-base text-justify mb-10 leading-relaxed">
           В 2020 году во время пандемии COVID-19, основательница нашего магазина
