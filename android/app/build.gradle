@@ -102,6 +102,12 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+            release {
+            storeFile file('release.keystore')
+            storePassword 'android'
+            keyAlias 'androidreleasekey'
+            keyPassword 'android'
+        }
     }
     buildTypes {
         debug {
@@ -111,7 +117,7 @@ android {
         minifyEnabled false
         shrinkResources false
         proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        // signingConfig signingConfigs.release ← временно закомментируй если нет подписи
+        signingConfig signingConfigs.release
     }
     }
     packagingOptions {
