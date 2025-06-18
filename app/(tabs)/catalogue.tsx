@@ -68,59 +68,26 @@ export default function TabFourScreen() {
               </Text>
 
               <Text className="mt-2 text-gray-700 text-sm">Размеры:</Text>
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{ paddingHorizontal: 4 }}
-              >
-                <View className="flex flex-row items-center space-x-2">
-                  {Array.isArray(item.size) && item.size.length > 0 ? (
-                    <Picker
-                      selectedValue={selectedSizes[item.id] ?? item.size[0]}
-                      onValueChange={(itemValue) =>
-                        setSelectedSizes((prev) => ({
-                          ...prev,
-                          [item.id]: itemValue,
-                        }))
-                      }
-                      style={{ height: 40, width: 140 }}
-                    >
-                      {item.size.map((size: string, i: number) => (
-                        <Picker.Item key={i} label={size} value={size} />
-                      ))}
-                    </Picker>
-                  ) : (
-                    <Text className="text-xs text-red-500">Нет размеров</Text>
-                  )}
-
-                  {/* {item.size.map((size: string, index: number) => (
-                    <TouchableOpacity
-                      key={index}
-                      onPress={() =>
-                        setSelectedSizes((prev) => ({
-                          ...prev,
-                          [item.id]: size,
-                        }))
-                      }
-                      className={`px-3 py-1 text-center rounded-full ${
-                        selectedSizes[item.id] === size
-                          ? "bg-blue-500"
-                          : "bg-blue-200"
-                      }`}
-                    >
-                      <Text
-                        className={`text-xs ${
-                          selectedSizes[item.id] === size
-                            ? "text-white"
-                            : "text-blue-800"
-                        } font-medium`}
-                      >
-                        {size}
-                      </Text>
-                    </TouchableOpacity>
-                  ))} */}
-                </View>
-              </ScrollView>
+              <View className="flex flex-row items-center space-x-2">
+                {Array.isArray(item.size) && item.size.length > 0 ? (
+                  <Picker
+                    selectedValue={selectedSizes[item.id] ?? item.size[0]}
+                    onValueChange={(itemValue) =>
+                      setSelectedSizes((prev) => ({
+                        ...prev,
+                        [item.id]: itemValue,
+                      }))
+                    }
+                    style={{ height: 40, width: 140 }}
+                  >
+                    {item.size.map((size: string, i: number) => (
+                      <Picker.Item key={i} label={size} value={size} />
+                    ))}
+                  </Picker>
+                ) : (
+                  <Text className="text-xs text-red-500">Нет размеров</Text>
+                )}
+              </View>
 
               <TouchableOpacity
                 onPress={() => handleAddToCart(item)}
