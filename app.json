@@ -9,6 +9,12 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "ios": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.jpg",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.sardorwebdev.demo",
       "supportsTablet": true
     },
     "android": {

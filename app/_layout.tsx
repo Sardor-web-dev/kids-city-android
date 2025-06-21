@@ -3,6 +3,7 @@ import { Stack } from "expo-router";
 import "react-native-reanimated";
 import "./global.css";
 import { PaperProvider } from "react-native-paper";
+import { CartProvider } from "@/contexts/CartContext";
 
 export default function RootLayout() {
   const [loaded] = useFonts({
@@ -17,10 +18,12 @@ export default function RootLayout() {
   return (
     <>
       <PaperProvider>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="+not-found" />
-        </Stack>
+        <CartProvider>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+        </CartProvider>
       </PaperProvider>
     </>
   );
