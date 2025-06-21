@@ -1,6 +1,8 @@
 import { useCart } from "@/contexts/CartContext";
 import React, { useState } from "react";
-import { View, Text, Image, FlatList, Alert, ScrollView } from "react-native";
+import { View, Text, FlatList, Alert, ScrollView } from "react-native";
+import CartItemCard from "@/components/custom/CartItemCard";
+
 import {
   Button,
   Modal,
@@ -146,34 +148,13 @@ const CartScreen = () => {
       <FlatList
         data={items}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <View
-            style={{
-              margin: 10,
-              backgroundColor: "#fff",
-              borderRadius: 10,
-              padding: 10,
-            }}
-          >
-            <Image
-              source={{ uri: item.Image }}
-              style={{ width: "100%", height: 200 }}
-            />
-            <Text style={{ fontWeight: "bold" }}>{item.name}</Text>
-            <Text>Размер: {item.selectedSize}</Text>
-            <Text>Цена: {item.price} сум</Text>
-            <View
-              style={{ flexDirection: "row", alignItems: "center", gap: 10 }}
-            >
-              <Button onPress={() => removeItem(item.id)}>-</Button>
-              <Text>{item.quantity}</Text>
-              <Button onPress={() => addItem({ ...item, quantity: 1 })}>
-                +
-              </Button>
-              <Button onPress={() => removeFromCart(item.id)}>Удалить</Button>
-            </View>
-          </View>
-        )}
+        numColumns={2}
+        columnWrapperStyle={{
+          justifyContent: "space-between",
+          paddingHorizontal: 10,
+        }}
+        contentContainerStyle={{ paddingBottom: 100 }}
+        renderItem={({ item }) => <CartItemCard item={item} />}
       />
 
       <View style={{ padding: 20 }}>
