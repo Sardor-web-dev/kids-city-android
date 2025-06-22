@@ -7,7 +7,7 @@ export default function HomeScreen() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://www.kidscity.uz/api/clothes")
+    fetch("https://kids-city-go.onrender.com/api/cloths")
       .then((res) => res.json())
       .then((data) => setClothes(data))
       .catch((err) => console.error("Ошибка загрузки:", err))

@@ -19,7 +19,7 @@ export default function ProductPage() {
 
   useEffect(() => {
     if (!id) return;
-    fetch(`https://www.kidscity.uz/api/clothes/${id}`)
+    fetch(`https://kids-city-go.onrender.com/api/cloths/${id}`)
       .then((res) => res.json())
       .then((data) => setProduct(data))
       .catch((err) => console.error("Ошибка загрузки:", err))
