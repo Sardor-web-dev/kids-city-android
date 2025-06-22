@@ -16,7 +16,7 @@ const TELEGRAM_TOKEN = "7542522767:AAGZUwMexxZwuuoBZknLraF-n-41WexGgmM";
 const CHAT_IDS = ["5809549678", "22215359"]; // можно массивом
 
 const CartScreen = () => {
-  const { items, addItem, removeItem, removeFromCart, clearCart } = useCart();
+  const { items, clearCart } = useCart();
 
   const [visible, setVisible] = useState(false);
   const [ordered, setOrdered] = useState(false);

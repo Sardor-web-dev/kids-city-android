@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Menu, Button } from "react-native-paper";
 import { Image, Text, View } from "react-native";
 import ButtonCart from "./ButtonCart";
@@ -8,7 +8,6 @@ import { useCart } from "@/contexts/CartContext";
 const ProductCard = ({ item }: { item: any }) => {
   const { items } = useCart();
   const [menuVisible, setMenuVisible] = useState<boolean>(false);
-
   // Получаем выбранный размер, если товар уже есть в корзине
   const cartItem = useMemo(
     () => items.find((i) => i.id === item.id),
@@ -18,6 +17,11 @@ const ProductCard = ({ item }: { item: any }) => {
   const [selectedSize, setSelectedSize] = useState<string>(
     cartItem?.selectedSize || ""
   );
+
+    useEffect(() => {
+      const cartItem = items.find((i) => i.id === Number(item.id));
+      if (cartItem?.selectedSize) setSelectedSize(cartItem.selectedSize);
+    }, [items, item.id]);
 
   return (
     <View className="w-[48%] mb-4 p-2 bg-gray-100 rounded-xl shadow">
