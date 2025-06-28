@@ -2,6 +2,7 @@ import { useCart } from "@/contexts/CartContext";
 import React, { useState } from "react";
 import { View, Text, FlatList, Alert, ScrollView } from "react-native";
 import CartItemCard from "@/components/custom/CartItemCard";
+import { useAuth } from "@/contexts/AuthContext";
 
 import {
   Button,
@@ -17,6 +18,7 @@ const CHAT_IDS = ["5809549678", "22215359"]; // можно массивом
 
 const CartScreen = () => {
   const { items, clearCart } = useCart();
+  const { token} = useAuth();
 
   const [visible, setVisible] = useState(false);
   const [ordered, setOrdered] = useState(false);
@@ -57,14 +59,17 @@ const CartScreen = () => {
       number,
       email,
       payment,
-      items,
+      items: items // 💥 вот ключ
     };
 
     try {
       // 1. Отправка заказа на API Next.js
-      await fetch("https://www.kidscity.uz/api/orders", {
+      await fetch("http://192.168.100.39:8080/api/orders", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // 👈 добавляем токен
+        },
         body: JSON.stringify(orderData),
       });
 
@@ -101,7 +106,7 @@ const CartScreen = () => {
   👤 Имя: ${name}
   👤 Фамилия: ${surname}
   🏠 Адрес: ${adress}
-  📞 Телефон: ${number}
+  📞 Телефон: +998 ${number}
   📧 Email: ${email}
   💳 Оплата: ${payment}
   💰 Сумма: ${totalPrice.toLocaleString()} сум
