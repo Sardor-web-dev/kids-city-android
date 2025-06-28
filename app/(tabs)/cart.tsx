@@ -64,7 +64,7 @@ const CartScreen = () => {
 
     try {
       // 1. Отправка заказа на API Next.js
-      await fetch("http://192.168.100.39:8080/api/orders", {
+      await fetch("https://kids-city-go.onrender.com/api/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

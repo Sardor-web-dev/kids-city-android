@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { View, Alert, ActivityIndicator } from "react-native";
 import { TextInput, Button, Text } from "react-native-paper";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import { useAuth } from "@/contexts/AuthContext"; // подключи
 
@@ -18,13 +17,16 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const response = await fetch("http://192.168.100.39:8080/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await fetch(
+        "https://kids-city-go.onrender.com/api/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
       const data = await response.json();
 

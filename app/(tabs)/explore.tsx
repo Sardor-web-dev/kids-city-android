@@ -19,7 +19,7 @@ export default function ProfileScreen() {
     const fetchOrders = async () => {
       try {
         const response = await fetch(
-          "http://192.168.100.39:8080/api/orders/user",
+          "https://kids-city-go.onrender.com/api/orders/user",
           {
             headers: {
               Authorization: `Bearer ${token}`,
