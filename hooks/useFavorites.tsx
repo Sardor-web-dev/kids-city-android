@@ -21,7 +21,7 @@ export default function useFavorites() {
 
   useEffect(() => {
     axios
-      .get("http://192.168.100.39:8080/api/favorites", {
+      .get("https://kids-city-go.onrender.com/api/favorites", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -67,7 +67,7 @@ export default function useFavorites() {
     try {
       if (exists) {
         await axios.delete(
-          `http://192.168.100.39:8080/api/favorites/${cloth.id}`,
+          `https://kids-city-go.onrender.com/api/favorites/${cloth.id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -76,7 +76,7 @@ export default function useFavorites() {
         );
       } else {
         const res = await axios.put(
-          "http://192.168.100.39:8080/api/favorites/add",
+          "https://kids-city-go.onrender.com/api/favorites/add",
           { clothId: cloth.id },
           {
             headers: {
