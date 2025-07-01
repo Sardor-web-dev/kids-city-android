@@ -26,15 +26,10 @@ export default function ButtonCart({
     }
 
     addItem({ ...item, selectedSize, quantity: 1 });
-    Alert.alert(
-      "Добавлено",
-      `${item.name} (${selectedSize}) добавлен в корзину.`
-    );
   };
 
   const handleRemoveFromCart = () => {
     removeFromCart(item.id); // можно доработать, если нужны разные размеры одного товара
-    Alert.alert("Удалено", `${item.name} удалён из корзины.`);
   };
 
   return (

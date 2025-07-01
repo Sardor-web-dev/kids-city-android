@@ -1,74 +1,110 @@
 import { useState, useMemo, useEffect } from "react";
-import { Menu, Button } from "react-native-paper";
-import { Image, Text, View } from "react-native";
-import ButtonCart from "./ButtonCart";
+import { Image, Text, View, TouchableOpacity, Pressable } from "react-native";
+import { Menu } from "react-native-paper";
 import { Link } from "expo-router";
 import { useCart } from "@/contexts/CartContext";
+import ButtonCart from "./ButtonCart";
+import { Heart } from "lucide-react-native"; // если используешь иконки
+import ModalTrigger from "./Trigger";
+import useFavorites from "@/hooks/useFavorites";
 
 const ProductCard = ({ item }: { item: any }) => {
   const { items } = useCart();
   const [menuVisible, setMenuVisible] = useState<boolean>(false);
-  // Получаем выбранный размер, если товар уже есть в корзине
+  const [selectedSize, setSelectedSize] = useState<string>("");
+  const { favorites, toggleFavorite } = useFavorites();
+  const isFavorite = favorites.some((fav) => fav.id === item.id);
+
   const cartItem = useMemo(
     () => items.find((i) => i.id === item.id),
     [items, item.id]
   );
 
-  const [selectedSize, setSelectedSize] = useState<string>(
-    cartItem?.selectedSize || ""
-  );
-
-    useEffect(() => {
-      const cartItem = items.find((i) => i.id === Number(item.id));
-      if (cartItem?.selectedSize) setSelectedSize(cartItem.selectedSize);
-    }, [items, item.id]);
+  useEffect(() => {
+    if (cartItem?.selectedSize) {
+      setSelectedSize(cartItem.selectedSize);
+    }
+  }, [cartItem]);
 
   return (
-    <View className="w-[48%] mb-4 p-2 bg-gray-100 rounded-xl shadow">
-      <Link href={`/product/${item.id}`}>
-        {item.Image ? (
-          <Image
-            source={{ uri: item.Image }}
-            style={{ width: "100%", height: 120, borderRadius: 10 }}
-            resizeMode="cover"
-            onError={() => console.warn("Ошибка загрузки изображения")}
+    <View className="w-[48%] mb-4 rounded-2xl bg-white shadow-lg overflow-hidden">
+      {/* Картинка + избранное */}
+      <View className="relative">
+        <Link href={`/product/${item.id}`} asChild>
+          <Pressable>
+            {item.Image ? (
+              <Image
+                source={{ uri: item.Image }}
+                className="w-full h-40 object-cover"
+                resizeMode="cover"
+              />
+            ) : (
+              <View className="h-40 w-full bg-gray-300 items-center justify-center">
+                <Text className="text-gray-600 text-sm">Нет фото</Text>
+              </View>
+            )}
+          </Pressable>
+        </Link>
+
+        {/* Иконка избранного (необязательно) */}
+        <TouchableOpacity
+          onPress={() => toggleFavorite(item)}
+          className="absolute top-2 right-2 bg-white/90 p-1 rounded-full shadow"
+        >
+          <Heart
+            color={isFavorite ? "red" : "gray"}
+            fill={isFavorite ? "red" : "none"}
           />
-        ) : (
-          <View className="bg-gray-300 h-120 justify-center items-center rounded-md">
-            <Text className="text-xs text-gray-600">Нет фото</Text>
-          </View>
-        )}
-      </Link>
+        </TouchableOpacity>
+      </View>
 
-      <Text className="text-base font-bold mt-2">{item.name}</Text>
-      <Text className="text-gray-600 text-xs">{item.description}</Text>
-      <Text className="text-black font-semibold mt-1 text-sm">
-        {item.price} сум
-      </Text>
+      {/* Контент карточки */}
+      <View className="p-3 space-y-1">
+        <Text
+          numberOfLines={1}
+          className="font-semibold text-base text-gray-800"
+        >
+          {item.name}
+        </Text>
 
-      <Text className="mt-2 text-gray-700 text-sm">Размеры:</Text>
-      <Menu
-        visible={menuVisible}
-        onDismiss={() => setMenuVisible(false)}
-        anchor={
-          <Button mode="outlined" onPress={() => setMenuVisible(true)}>
-            {selectedSize || "Выбери размер"}
-          </Button>
-        }
-      >
-        {item.size.map((size: string, i: number) => (
-          <Menu.Item
-            key={i}
-            onPress={() => {
-              setSelectedSize(size);
-              setMenuVisible(false);
-            }}
-            title={size}
-          />
-        ))}
-      </Menu>
+        <Text numberOfLines={2} className="text-xs text-gray-600">
+          {item.description}
+        </Text>
 
-      <ButtonCart item={item} selectedSize={selectedSize} />
+        <Text className="text-sm font-semibold text-black mt-1">
+          {item.price.toLocaleString()} сум
+        </Text>
+
+        {/* Размеры */}
+        <Text className="text-sm mt-2 mb-1 text-gray-700 font-medium">
+          Размер
+        </Text>
+
+        <Menu
+          visible={menuVisible}
+          onDismiss={() => setMenuVisible(false)}
+          anchor={
+            <ModalTrigger onPress={() => setMenuVisible(true)}>
+              {selectedSize || "Выберите размер"}
+            </ModalTrigger>
+          }
+        >
+          {item.size?.map((size: string, i: number) => (
+            <Menu.Item
+              key={i}
+              onPress={() => {
+                setSelectedSize(size);
+                setMenuVisible(false);
+              }}
+              title={size}
+              titleStyle={{ fontSize: 14 }}
+            />
+          ))}
+        </Menu>
+
+        {/* Кнопка добавления в корзину */}
+        <ButtonCart item={item} selectedSize={selectedSize} />
+      </View>
     </View>
   );
 };

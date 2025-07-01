@@ -1,11 +1,18 @@
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  Image,
+  FlatList,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
-import { FlatList, View } from "react-native";
-import { ActivityIndicator, Text } from "react-native-paper";
+import { ActivityIndicator } from "react-native-paper";
 
 export default function ProfileScreen() {
-  const { token, isAuthenticated } = useAuth();
+  const { token, isAuthenticated, logout } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -63,26 +70,52 @@ export default function ProfileScreen() {
   }
 
   return (
-    <View className="flex-1 bg-white p-4">
-      <Text className="text-3xl font-bold mb-4">Ваши заказы</Text>
-      {orders.length === 0 ? (
-        <Text className="text-gray-500">У вас пока нет заказов.</Text>
-      ) : (
-        <FlatList
-          data={orders}
-          keyExtractor={(item: any) => item.id.toString()}
-          renderItem={({ item }) => (
-            <View className="bg-gray-100 p-4 rounded-lg mb-2">
-              <Text className="font-bold">
-                Заказ №{item.id} ({item.status})
+    <ScrollView className="flex-1 bg-gray-100 p-4">
+      <Text className="text-3xl font-black mb-2">Ваши заказы</Text>
+      <View className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {orders.length === 0 ? (
+          <Text className="text-gray-500">У вас пока нет заказов.</Text>
+        ) : (
+          orders.map((order: any) => (
+            <View key={order.id} className="rounded-xl bg-white p-4 shadow-lg">
+              <Text>
+                🧾Заказ был сделан в:{" "}
+                {new Date(order.createdAt).toLocaleDateString()}
               </Text>
-              <Text>Имя: {item.name}</Text>
-              <Text>Сумма: {item.total.toLocaleString()} сум</Text>
-              <Text>Дата: {new Date(item.createdAt).toLocaleDateString()}</Text>
+              <Text className="font-bold mb-1">
+                📦Статус:{" "}
+                {(order.status === "canceled" && "Заказ отменен") ||
+                  (order.status === "process" && "В обработке") ||
+                  (order.status === "done" && "Доставлен")}
+              </Text>
+              <View className="mt-2 space-y-1">
+                {order.items.map((item: any) => (
+                  <View
+                    key={item.id}
+                    className="flex-row items-center gap-2 mb-1"
+                  >
+                    <Image
+                      source={{ uri: item.Image }}
+                      style={{ width: 50, height: 50, borderRadius: 6 }}
+                      resizeMode="cover"
+                    />
+                    <Text>
+                      {item.name} × {item.quantity}
+                    </Text>
+                  </View>
+                ))}
+              </View>
             </View>
-          )}
-        />
-      )}
-    </View>
+          ))
+        )}
+      </View>
+
+      <TouchableOpacity
+        onPress={logout}
+        className="mt-6 py-3 px-4 bg-black rounded-xl"
+      >
+        <Text className="text-white text-center font-semibold">Выйти</Text>
+      </TouchableOpacity>
+    </ScrollView>
   );
 }
