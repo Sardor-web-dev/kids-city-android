@@ -63,7 +63,7 @@ const CartScreen = () => {
     };
 
     try {
-      // 1. Отправка заказа на API Next.js
+      // 1. Отправка заказа на API Golang
       await fetch("https://kids-city-go.onrender.com/api/orders", {
         method: "POST",
         headers: {
